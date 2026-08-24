@@ -37,7 +37,8 @@ app = FastAPI(
 )
 
 # Configure CORS
-_cors_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",") if o.strip()]
+_default_cors_origins = "http://localhost:3000,https://scholarsynth-web.vercel.app"
+_cors_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", _default_cors_origins).split(",") if o.strip()]
 _cors_wildcard = "*" in _cors_origins
 if _cors_wildcard:
     logger.warning("CORS_ORIGINS includes '*' - disabling credentialed requests to avoid an open CORS policy")
