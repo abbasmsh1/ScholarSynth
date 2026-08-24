@@ -26,8 +26,15 @@ class PaperProcessor:
             logger.error("Failed to load spaCy model. Please install it with: python -m spacy download en_core_web_sm")
             raise
         
-        self.upload_dir = os.getenv("UPLOAD_DIR", os.path.join(tempfile.gettempdir(), "uploads"))
-        os.makedirs(self.upload_dir, exist_ok=True)
+        upload_dir = os.getenv("UPLOAD_DIR")
+        if upload_dir:
+            os.makedirs(upload_dir, exist_ok=True)
+        else:
+            # mkdtemp creates an owner-only (0700), non-predictable directory -
+            # a fixed name under the shared system temp dir would let any other
+            # local process read/overwrite uploaded PDFs or plant symlinks there.
+            upload_dir = tempfile.mkdtemp(prefix="scholarsynth-uploads-")
+        self.upload_dir = upload_dir
 
     async def process_paper(self, file: Any, db: AsyncSession) -> Paper:
         """Process a PDF paper and extract relevant information"""

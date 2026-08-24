@@ -13,9 +13,12 @@ from datetime import datetime
 load_dotenv()
 
 # Get database path from environment variable or use default. Falls back to
-# the system temp dir - the working directory is read-only in serverless
-# deployments (e.g. Vercel).
-_default_db_path = os.path.join(tempfile.gettempdir(), "papers.db")
+# a fresh owner-only directory under the system temp dir - the working
+# directory is read-only in serverless deployments (e.g. Vercel), and a fixed
+# predictable filename directly in the shared temp dir would let any other
+# local process read/tamper with it.
+_default_db_dir = tempfile.mkdtemp(prefix="scholarsynth-db-")
+_default_db_path = os.path.join(_default_db_dir, "papers.db")
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite+aiosqlite:///{_default_db_path}")
 
 # Create a single Base instance

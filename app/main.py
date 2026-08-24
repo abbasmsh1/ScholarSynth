@@ -37,10 +37,15 @@ app = FastAPI(
 )
 
 # Configure CORS
+_cors_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",") if o.strip()]
+_cors_wildcard = "*" in _cors_origins
+if _cors_wildcard:
+    logger.warning("CORS_ORIGINS includes '*' - disabling credentialed requests to avoid an open CORS policy")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:3000").split(","),
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials=not _cors_wildcard,
     allow_methods=["*"],
     allow_headers=["*"],
 )
