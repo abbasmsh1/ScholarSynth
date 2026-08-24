@@ -1,9 +1,26 @@
 .App {
+  position: relative;
   min-height: 100vh;
-  padding: 48px 20px 80px;
+  padding: 64px 20px 64px;
+  overflow: hidden;
+}
+
+.bg-glow {
+  position: absolute;
+  top: -220px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(closest-side, rgba(94, 106, 210, 0.28), rgba(94, 106, 210, 0) 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .container {
+  position: relative;
+  z-index: 1;
   max-width: 760px;
   margin: 0 auto;
 }
@@ -11,52 +28,125 @@
 /* Header */
 .app-header {
   text-align: left;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 
 .eyebrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--primary-hover);
-  margin-bottom: 12px;
+  background: rgba(94, 106, 210, 0.1);
+  border: 1px solid rgba(94, 106, 210, 0.3);
+  border-radius: var(--radius-pill);
+  padding: 5px 14px;
+  margin-bottom: 20px;
 }
 
 h1 {
   color: var(--ink);
-  font-size: 36px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 12px;
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: 0 0 14px;
+}
+
+.accent-text {
+  background: linear-gradient(90deg, var(--primary-hover), var(--primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .app-subtitle {
   color: var(--ink-subtle);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   margin: 0;
-  max-width: 52ch;
+  max-width: 48ch;
 }
 
 h2 {
   color: var(--ink);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  margin: 0 0 20px;
+  margin: 0;
 }
 
 /* Panels */
 .panel {
+  position: relative;
   background: var(--surface-1);
   border: 1px solid var(--hairline);
   border-radius: var(--radius-lg);
   padding: 28px;
   margin-bottom: 20px;
   text-align: left;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary) 0%, rgba(94, 106, 210, 0) 55%);
+  opacity: 0.7;
+}
+
+.panel:hover {
+  border-color: var(--hairline-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.5);
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.panel-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  color: var(--primary-hover);
+}
+
+.panel-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.panel-index {
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--ink-tertiary);
+}
+
+.panel-description {
+  color: var(--ink-subtle);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* Upload */
@@ -150,6 +240,11 @@ h2 {
   border: 1px solid var(--hairline);
   color: var(--ink-muted);
   font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.file-item:hover {
+  border-color: var(--hairline-strong);
 }
 
 .remove-button {
@@ -201,13 +296,21 @@ h2 {
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
-  transition: background-color 0.15s ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
 }
 
 .upload-button:hover:not(:disabled),
 .review-controls button:hover:not(:disabled),
 .citation-controls button:hover:not(:disabled) {
   background-color: var(--primary-hover);
+  box-shadow: 0 4px 16px -4px rgba(94, 106, 210, 0.6);
+}
+
+.upload-button:active:not(:disabled),
+.review-controls button:active:not(:disabled),
+.citation-controls button:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .upload-button:disabled,
@@ -216,6 +319,7 @@ h2 {
   background-color: var(--surface-3);
   color: var(--ink-tertiary);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* Paper Selector */
@@ -245,6 +349,11 @@ h2 {
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 11px;
+  transition: border-color 0.15s ease;
+}
+
+.paper-selector select:hover:not(:disabled) {
+  border-color: var(--ink-tertiary);
 }
 
 .paper-selector select:focus {
@@ -259,10 +368,20 @@ h2 {
   cursor: not-allowed;
 }
 
-.no-papers {
+.no-papers,
+.no-citations {
   color: var(--ink-subtle);
   font-size: 13px;
+  text-align: center;
+  padding: 16px;
   margin-top: 10px;
+  border: 1px dashed var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.no-citations {
+  margin-top: 24px;
 }
 
 /* Review controls */
@@ -335,6 +454,11 @@ h2 {
   border-radius: var(--radius-sm);
   background-color: var(--surface-1);
   border-left: 3px solid var(--primary);
+  transition: border-color 0.15s ease;
+}
+
+.citation-item:hover {
+  border-left-color: var(--primary-hover);
 }
 
 .citation-text {
@@ -347,16 +471,6 @@ h2 {
   margin: 0;
   font-size: 12px;
   color: var(--ink-subtle);
-}
-
-.no-citations {
-  color: var(--ink-subtle);
-  font-size: 13px;
-  margin-top: 24px;
-  text-align: center;
-  padding: 20px;
-  background-color: var(--surface-2);
-  border-radius: var(--radius-md);
 }
 
 /* Status messages */
@@ -387,10 +501,31 @@ h2 {
   background-color: var(--warning-bg);
 }
 
+/* Footer */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 40px;
+  font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: var(--ink-tertiary);
+}
+
+.app-footer .dot {
+  color: var(--hairline-strong);
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .App {
-    padding: 32px 16px 56px;
+    padding: 40px 16px 48px;
+  }
+
+  .bg-glow {
+    width: 600px;
+    height: 360px;
   }
 
   .panel {
@@ -398,7 +533,11 @@ h2 {
   }
 
   h1 {
-    font-size: 28px;
+    font-size: 32px;
+  }
+
+  .panel-header {
+    gap: 12px;
   }
 
   .upload-area {
