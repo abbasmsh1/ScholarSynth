@@ -1,4 +1,5 @@
 import os
+import tempfile
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
@@ -11,8 +12,11 @@ from datetime import datetime
 # Load environment variables
 load_dotenv()
 
-# Get database path from environment variable or use default
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./papers.db")
+# Get database path from environment variable or use default. Falls back to
+# the system temp dir - the working directory is read-only in serverless
+# deployments (e.g. Vercel).
+_default_db_path = os.path.join(tempfile.gettempdir(), "papers.db")
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite+aiosqlite:///{_default_db_path}")
 
 # Create a single Base instance
 Base = declarative_base()

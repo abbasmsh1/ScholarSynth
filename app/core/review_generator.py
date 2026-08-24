@@ -19,16 +19,12 @@ load_dotenv()
 
 class ReviewGenerator:
     def __init__(self):
-        """Initialize the review generator with Together AI LLM."""
+        """Initialize the review generator. The Together AI client is created
+        lazily so importing/starting the app doesn't require the API key -
+        only generating a review does."""
         self.together_api_key = os.getenv("TOGETHER_API_KEY")
-        if not self.together_api_key:
-            raise ValueError("TOGETHER_API_KEY environment variable is not set")
-        
-        self.llm = Together(
-            together_api_key=self.together_api_key,
-            model="mistralai/Mixtral-8x7B-Instruct-v0.1"
-        )
-        
+        self._llm = None
+
         # Define prompts for different sections
         self.intro_prompt = PromptTemplate(
             input_variables=["topic", "papers"],
@@ -99,7 +95,18 @@ class ReviewGenerator:
             3. Suggest future directions
             """
         )
-    
+
+    @property
+    def llm(self) -> Together:
+        if not self.together_api_key:
+            raise ValueError("TOGETHER_API_KEY environment variable is not set")
+        if self._llm is None:
+            self._llm = Together(
+                together_api_key=self.together_api_key,
+                model="mistralai/Mixtral-8x7B-Instruct-v0.1"
+            )
+        return self._llm
+
     async def generate(
         self,
         paper_ids: List[str],

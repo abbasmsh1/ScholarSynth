@@ -14,16 +14,7 @@ setup(
         "sqlalchemy==2.0.23",
         "aiosqlite==0.19.0",
         "langchain>=0.1.0",
-        "pymupdf>=1.23.0",
         "spacy>=3.7.0",
-        "nltk>=3.8.1",
-        "transformers>=4.35.0",
-        "faiss-cpu>=1.7.4",
-        "chromadb>=0.4.0",
-        "requests>=2.31.0",
-        "beautifulsoup4>=4.12.0",
-        "scholarly>=1.7.0",
-        "bibtexparser>=1.4.0",
         "pydantic>=2.5.0"
     ],
 ) 

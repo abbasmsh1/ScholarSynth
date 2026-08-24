@@ -27,9 +27,8 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
-# Validate required environment variables
 if not os.getenv("TOGETHER_API_KEY"):
-    raise ValueError("TOGETHER_API_KEY environment variable is not set")
+    logger.warning("TOGETHER_API_KEY is not set - review generation will fail until it's configured")
 
 app = FastAPI(
     title="AI Academic Writing Agent",
@@ -40,7 +39,7 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:3000").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,4 +1,5 @@
 import os
+import tempfile
 import spacy
 import pdfplumber
 from typing import List, Dict, Any
@@ -25,7 +26,7 @@ class PaperProcessor:
             logger.error("Failed to load spaCy model. Please install it with: python -m spacy download en_core_web_sm")
             raise
         
-        self.upload_dir = "uploads"
+        self.upload_dir = os.getenv("UPLOAD_DIR", os.path.join(tempfile.gettempdir(), "uploads"))
         os.makedirs(self.upload_dir, exist_ok=True)
 
     async def process_paper(self, file: Any, db: AsyncSession) -> Paper:
