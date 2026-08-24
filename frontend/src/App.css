@@ -56,10 +56,7 @@ h1 {
 }
 
 .accent-text {
-  background: linear-gradient(90deg, var(--primary-hover), var(--primary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--primary-hover);
 }
 
 .app-subtitle {
@@ -453,12 +450,12 @@ h2 {
   padding: 14px;
   border-radius: var(--radius-sm);
   background-color: var(--surface-1);
-  border-left: 3px solid var(--primary);
+  border: 1px solid var(--hairline);
   transition: border-color 0.15s ease;
 }
 
 .citation-item:hover {
-  border-left-color: var(--primary-hover);
+  border-color: var(--hairline-strong);
 }
 
 .citation-text {
