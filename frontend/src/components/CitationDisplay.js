@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const CitationDisplay = () => {
     const [papers, setPapers] = useState([]);
@@ -12,7 +12,7 @@ const CitationDisplay = () => {
         // Fetch available papers when component mounts
         const fetchPapers = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/papers');
+                const response = await api.get('/api/papers');
                 setPapers(response.data.papers || []);
             } catch (err) {
                 console.error('Error fetching papers:', err);
@@ -33,7 +33,7 @@ const CitationDisplay = () => {
         setCitations([]);
 
         try {
-            const response = await axios.get(`http://localhost:8000/api/citations/${selectedPaperId}`);
+            const response = await api.get(`/api/citations/${selectedPaperId}`);
             setCitations(response.data.citations || []);
         } catch (err) {
             console.error('Citation fetch error:', err);

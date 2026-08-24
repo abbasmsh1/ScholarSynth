@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const ReviewGenerator = () => {
   const [papers, setPapers] = useState([]);
@@ -12,7 +12,7 @@ const ReviewGenerator = () => {
     // Fetch available papers when component mounts
     const fetchPapers = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/papers');
+        const response = await api.get('/api/papers');
         setPapers(response.data.papers || []);
       } catch (err) {
         console.error('Error fetching papers:', err);
@@ -33,7 +33,7 @@ const ReviewGenerator = () => {
     setReview(null);
 
     try {
-      const response = await axios.post(`http://localhost:8000/api/generate-review/${selectedPaperId}`);
+      const response = await api.post(`/api/generate-review/${selectedPaperId}`);
       setReview(response.data);
     } catch (err) {
       console.error('Review generation error:', err);

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const Upload = () => {
     const [files, setFiles] = useState([]);
@@ -88,7 +88,7 @@ const Upload = () => {
                 formData.append('files', file);
             });
 
-            const response = await axios.post('http://localhost:8000/api/process-papers', formData, {
+            const response = await api.post('/api/process-papers', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
